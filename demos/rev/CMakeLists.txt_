@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.13)
+enable_language(Fortran)   
+
+message(STATUS " configuring demos in ${CMAKE_CURRENT_SOURCE_DIR}")
+
+file(GLOB REV_SOURCE_FILES "rev.f90")
+
+message(STATUS "Added subdirectory source files: ${REV_SOURCE_FILES}")
+
+if ("${REV_SOURCE_FILES}" STREQUAL "")
+    message(WARNING "No source files found in directory: ${dir}")
+else()
+    add_executable (rev ${REV_SOURCE_FILES})
+    target_link_libraries(rev auto_f)
+endif()

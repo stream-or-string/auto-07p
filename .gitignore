@@ -8,10 +8,9 @@
 *.out
 *.toc
 
-Makefile
+/Makefile
 /bin/
-!/bin/auto
-!/bin/autox
+/build/
 /lib/
 /config.log
 /config.status
