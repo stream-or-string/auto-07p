@@ -10,3 +10,6 @@ target_link_libraries(r3b auto_f)
 add_executable (r3bman)
 target_sources(r3bman PRIVATE man.f90)
 target_link_libraries(r3bman auto_f)
+
+install(TARGETS r3b DESTINATION  ${AUTODIR}/demos/bin/)
+install(TARGETS r3bman DESTINATION ${AUTODIR}/demos/bin/)

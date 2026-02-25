@@ -20,6 +20,7 @@ foreach(dir ${DEMO_DIRS})
     else()
         add_executable (${dir} ${SOURCE_FILES})
         target_link_libraries(${dir} auto_f) 
+        install(TARGETS ${dir} DESTINATION ${AUTODIR}/demos/bin)
     endif()
 endforeach()
 
@@ -29,6 +30,15 @@ add_subdirectory(sib)
 add_subdirectory(fnb)
 add_subdirectory(san)
 add_subdirectory(r3b)
+
+# Install demos source files to $INSTALL_PREFIX}/lib/auto-07p/demos for reference, but exclude .git directory
+# the executables are installed to ${INSTALL_PREFIX}/bin/demos by the individual CMakeLists.txt files in each demo subdirectory
+message(STATUS "============== ${AUTODIR} ==================")
+install(DIRECTORY ./
+  DESTINATION ${AUTODIR}/demos/
+  PATTERN ".git" EXCLUDE)
+
+
 
 # TODO
 #add_subdirectory(kdv) # linking error: multiple definitions of

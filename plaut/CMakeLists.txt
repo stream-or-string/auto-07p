@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.13)
 
 # Plaut plotting package
 
@@ -34,6 +34,7 @@ if(PLAUT_SOURCES)
   install(TARGETS plaut
     DESTINATION lib/auto-07p/bin)
 
+  #[[   No need to install
   # Install documentation
   install(FILES
     README
@@ -49,6 +50,7 @@ if(PLAUT_SOURCES)
     plaut.tex
     DESTINATION lib/auto-07p/doc/plaut
     OPTIONAL)
+  ]]
 
 else()
   message(STATUS "Plaut sources not found, skipping plaut build")

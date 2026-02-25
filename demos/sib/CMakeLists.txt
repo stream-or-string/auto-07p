@@ -5,3 +5,5 @@ message(STATUS " configuring demos in ${CMAKE_CURRENT_SOURCE_DIR}")
 
 add_executable (sib sib.c)
 target_link_libraries(sib fautcon)
+
+install(TARGETS sib DESTINATION ${AUTODIR}/demos/bin/)

@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.13)
 
-project(AUTO C CXX Fortran)
+project(AUTO07 C CXX Fortran)
 
 # Set default build type
 if(NOT CMAKE_BUILD_TYPE)
@@ -10,9 +10,12 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Version and installation paths
-set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}" CACHE STRING
+set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install_auto" CACHE STRING
     "Choose the installation directory; by default it installs in the Auto directory."
     FORCE)
+    
+# Installation configuration
+set(AUTODIR "${CMAKE_INSTALL_PREFIX}/lib/auto-07p")
 
 # C++ Language Features
 set(CMAKE_CXX_STANDARD 17)
@@ -29,7 +32,7 @@ option(BUILD_GUI "Compile the Motif based GUI package" OFF)
 option(BUILD_DOCUMENTATION "Build the project documentation" OFF)
 option(BUILD_DEMOS "Build the demos" ON)
 option(BUILD_PYTHON "Build Python wheel" OFF)
-option(BUILD_CMDS "Build AUTO @commands" OFF)
+option(BUILD_CMDS "Build AUTO @commands" ON)
 
 
 # OpenMP support
@@ -131,17 +134,16 @@ if(BUILD_GUI)
   add_subdirectory(gui)
 endif()
 
+
 # Documentation
 if(BUILD_DOCUMENTATION)
   add_subdirectory(doc)
 endif()
 
-# Installation configuration
-set(AUTODIR "${CMAKE_INSTALL_PREFIX}/lib/auto-07p")
 
 # Install binaries
-if(EXISTS "${CMAKE_BINARY_DIR}/bin")
-  install(DIRECTORY ${CMAKE_BINARY_DIR}/bin/
+if(EXISTS "${CMAKE_SOURCE_DIR}/bin")
+  install(DIRECTORY ${CMAKE_SOURCE_DIR}/bin/
     DESTINATION bin
     FILES_MATCHING PATTERN "auto" PATTERN "autox"
     PERMISSIONS OWNER_EXECUTE OWNER_READ GROUP_READ WORLD_READ)
@@ -164,21 +166,8 @@ endif()
 install(FILES include/auto_f2c.h
   DESTINATION ${AUTODIR}/include/)
 
-# Install utility binaries
-install(PROGRAMS
-  bin/autlab
-  bin/deletelp
-  bin/double
-  bin/keepbp
-  bin/keeplp
-  bin/keepsp
-  bin/keepuz
-  bin/listlabels
-  bin/reduce
-  bin/relabel
-  bin/triple
-  DESTINATION ${AUTODIR}/bin/
-  OPTIONAL)
+install(FILES include/auto_f2c.h
+  DESTINATION include/)
 
 # Install config file
 if(EXISTS "${CMAKE_SOURCE_DIR}/.autorc")
@@ -194,12 +183,6 @@ if(EXISTS "${CMAKE_BINARY_DIR}/lib")
     FILES_MATCHING PATTERN "*.a" PATTERN "*.so*")
 endif()
 
-# Install documentation
-if(EXISTS "${CMAKE_SOURCE_DIR}/doc/auto.pdf")
-  install(FILES doc/auto.pdf
-    DESTINATION ${AUTODIR}/doc/)
-endif()
-
 # Install Plaut04 files
 if(BUILD_PLAUT04)
   if(EXISTS "${CMAKE_SOURCE_DIR}/plaut04/doc")
@@ -207,20 +190,14 @@ if(BUILD_PLAUT04)
       DESTINATION ${AUTODIR}/plaut04/doc/)
   endif()
   if(EXISTS "${CMAKE_SOURCE_DIR}/plaut04/plaut04.rc")
-    install(FILES plaut04/*.rc
-      DESTINATION ${AUTODIR}/plaut04/)
+    install(DIRECTORY plaut04/
+      DESTINATION ${AUTODIR}/plaut04/
+      FILES_MATCHING PATTERN "*.rc")
   endif()
   if(EXISTS "${CMAKE_SOURCE_DIR}/plaut04/widgets")
     install(DIRECTORY plaut04/widgets/
       DESTINATION ${AUTODIR}/plaut04/widgets/)
   endif()
-endif()
-
-# Install demos
-if(EXISTS "${CMAKE_SOURCE_DIR}/demos")
-  install(DIRECTORY demos/
-    DESTINATION ${AUTODIR}/demos/
-    PATTERN ".git" EXCLUDE)
 endif()
 
 # Custom test target 

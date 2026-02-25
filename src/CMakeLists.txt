@@ -178,9 +178,9 @@ add_library(auto_f
 
 
 # Set include directories
-target_include_directories(auto_f
-  PUBLIC
-    ${CMAKE_SOURCE_DIR}/include
+target_include_directories(auto_f PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDE_DIR}>
 )
 
 # Add MPI support if requested
@@ -215,10 +215,9 @@ set_target_properties(auto_c PROPERTIES
 )
 
 target_sources(auto_c PRIVATE ${USER_C_SOURCES})
-
-target_include_directories(auto_c
-  PUBLIC
-    ${CMAKE_SOURCE_DIR}/include
+target_include_directories(auto_c PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDE_DIR}>
 )
 
 target_link_libraries(auto_c
@@ -230,20 +229,40 @@ target_link_libraries(auto_c
 add_library(fautcon STATIC ${FAUTOCON_SOURCES})
 target_link_libraries(fautcon auto_f auto_c)
 
-# Installation
-install(TARGETS auto_f auto_c
+install(TARGETS auto_f auto_c fautcon
+  EXPORT AutoTargets
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
   RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include
+ )
+
+install(EXPORT AutoTargets
+    FILE AutoTargets.cmake
+    NAMESPACE AUTO07::
+    DESTINATION lib/cmake/AUTO07
+)
+
+include(CMakePackageConfigHelpers)
+
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/AutoConfigVersion.cmake"
+    VERSION 1.0.0
+    COMPATIBILITY AnyNewerVersion
+)
+
+configure_package_config_file(
+    "AutoConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/AutoConfig.cmake"
+    INSTALL_DESTINATION lib/cmake/AUTO07
 )
 
 install(FILES
-  ${MAIN_SOURCES}
-  ${USER_C_SOURCES}
-  DESTINATION src
+    "${CMAKE_CURRENT_BINARY_DIR}/AutoConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/AutoConfigVersion.cmake"
+    DESTINATION lib/cmake/AUTO07
 )
 
-# Add custom target to match original Makefile behavior
 add_custom_target(clean-lib
   COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/lib
   COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/*.mod

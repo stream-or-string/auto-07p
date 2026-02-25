@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.13)
 
 # Utility programs compilation
 
@@ -83,7 +83,7 @@ add_executable(relabel
 # Install executables
 install(TARGETS
   autlab double triple keepbp keeplp keepuz keepsp deletelp listlabels reduce relabel
-  DESTINATION bin)
+  DESTINATION ${AUTODIR}/bin)
 
 # Clean rule equivalent to original Makefile
 add_custom_target(util-clean
