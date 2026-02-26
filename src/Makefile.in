@@ -13,15 +13,22 @@ OPT=@OPT_FLAG@
 OBJ= ../lib/main.o ../lib/blas.o ../lib/lapack.o
 RM=rm -f
 #
-all: lib compile ../lib/libauto_c.a move
+all: lib compile ../lib/libauto_f.a ../lib/libauto_c.a move
 #
 lib:
 	@mkdir -p ../lib
 #
 compile: $(OBJ)
 #
-../lib/main.o: main.f90 ../lib/homcont.o ../lib/maps.o ../lib/optimization.o ../lib/parabolic.o ../lib/timeint.o
+../lib/libauto_f.a: ../lib/auto_entry.o ../lib/blas.o ../lib/lapack.o ../lib/auto_constants.o ../lib/mpi.o ../lib/mesh.o ../lib/support.o ../lib/io.o ../lib/solvebv.o ../lib/interfaces.o ../lib/ae.o ../lib/bvp.o ../lib/toolboxae.o ../lib/toolboxbv.o ../lib/floquet.o ../lib/equilibrium.o ../lib/maps.o ../lib/periodic.o ../lib/timeint.o ../lib/homcont.o ../lib/main.o 
+	ar cr $@ $^ 
+
+#
+../lib/main.o: main.f90 ../lib/homcont.o ../lib/maps.o ../lib/optimization.o ../lib/parabolic.o ../lib/timeint.o ../lib/auto_entry.o
 	$(FC) $(FFLAGS) $(OPT) -c main.f90 -o $@
+#
+../lib/auto_entry.o: auto_entry.f90
+	$(FC) $(FFLAGS) $(OPT) -c auto_entry.f90  -o $@
 #
 ../lib/solvebv.o: solvebv.f90 ../lib/support.o
 	$(FC) $(FFLAGS) $(OPT) -c solvebv.f90 -o $@
@@ -77,7 +84,7 @@ compile: $(OBJ)
 ../lib/auto_constants.o: auto_constants.f90 ../include/auto.h
 	$(FC) $(FFLAGS) $(OPT) -I../include -c auto_constants.f90 -o $@
 #
-../lib/libauto_c.a: user_c.f90
+../lib/libauto_c.a: user_c.f90 ../lib/libauto_f.a
 	rm -f $@
 	$(FC) $(FFLAGS) $(OPT) -c user_c.f90 -o user_c.o
 	ar cr $@ user_c.o

@@ -1,4 +1,4 @@
-module auto_entry
+MODULE auto_entry
   use, intrinsic :: iso_c_binding, only: c_int, c_double
   use AUTOMPI
   use IO
@@ -16,7 +16,7 @@ module auto_entry
 
 contains
 
-  subroutine auto_main()
+  SUBROUTINE auto_main()
     implicit none
     type(AUTOPARAMETERS) AP
 
@@ -69,18 +69,18 @@ contains
     ENDDO
     CALL MPIEND()
  301 FORMAT(/,' Total Time ',E12.3)
-  end subroutine auto_main
+  END SUBROUTINE auto_main
 
   ! C-bind wrapper to expose a stable symbol for ctypes
-  subroutine auto_main_c() bind(C, name="auto_main_c")
+  SUBROUTINE auto_main_c() bind(C, name="auto_main_c")
     use, intrinsic :: iso_c_binding, only: c_int
     implicit none
     call auto_main()
-  end subroutine auto_main_c
+  END SUBROUTINE auto_main_c
 
-  !----- Copied helper subroutines from original PROGRAM AUTO CONTAINS -----
+  !----- Copied helper SUBROUTINEs from original PROGRAM AUTO CONTAINS -----
 
-  subroutine MPIWORKER(AP)
+  SUBROUTINE MPIWORKER(AP)
     use AUTOMPI
     implicit none
     type(AUTOPARAMETERS) AP
@@ -92,9 +92,9 @@ contains
       deallocate(ICU)
       if(MPIWFI()) cycle
     end do
-  end subroutine MPIWORKER
+  END SUBROUTINE MPIWORKER
 
-  subroutine FINDLB_OR_STOP(AP,UNITC)
+  SUBROUTINE FINDLB_OR_STOP(AP,UNITC)
     use AUTO_CONSTANTS, ONLY: SIRS
     implicit none
     type(AUTOPARAMETERS) AP
@@ -113,9 +113,9 @@ contains
       endif
       AP%NPAR=MAX(NPARR,AP%NPAR)
     endif
-  end subroutine FINDLB_OR_STOP
+  END SUBROUTINE FINDLB_OR_STOP
 
-  subroutine AUTOI(AP,ICU)
+  SUBROUTINE AUTOI(AP,ICU)
     use TOOLBOXAE
     use TOOLBOXBV
     use EQUILIBRIUM
@@ -170,9 +170,9 @@ contains
     endif
  500 FORMAT(' Initialization Error')
     deallocate(ICP)
-  end subroutine AUTOI
+  END SUBROUTINE AUTOI
 
-  subroutine INIT(AP,UNITC,EOF,KEYS,LINE)
+  SUBROUTINE INIT(AP,UNITC,EOF,KEYS,LINE)
     use AUTO_CONSTANTS
     use HOMCONT, ONLY : INSTRHO
     implicit none
@@ -303,9 +303,9 @@ contains
     AP%BIFF=0.d0
     AP%SPBF=0.d0
     EOF=.FALSE.
-  end subroutine INIT
+  END SUBROUTINE INIT
 
-  subroutine CLEANUP()
+  SUBROUTINE CLEANUP()
     use AUTO_CONSTANTS, ONLY : IVTHU,IVUZR,IVUZSTOP,IVTHL,ICU,parnames, &
          unames,SP,STOPS,PARVALS,UVALS
     implicit none
@@ -317,9 +317,9 @@ contains
     enddo
     deallocate(IVTHU,IVUZR,IVUZSTOP,IVTHL,ICU,parnames,unames,SP,STOPS, &
          PARVALS,UVALS)
-  end subroutine CLEANUP
+  END SUBROUTINE CLEANUP
 
-  subroutine INIT1(AP)
+  SUBROUTINE INIT1(AP)
     use AUTO_CONSTANTS, ONLY:IVTHL,TY
     use SUPPORT, ONLY: LBTYPE
     double precision, parameter :: HMACH=1.0d-7
@@ -364,6 +364,6 @@ contains
       endif
     endif
     return
-  end subroutine INIT1
+  END SUBROUTINE INIT1
 
-end module auto_entry
+END MODULE auto_entry
