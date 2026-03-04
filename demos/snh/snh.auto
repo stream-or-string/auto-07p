@@ -6,7 +6,7 @@
 auto('h1b.auto')
 
 # compute the codimension-one PtoE connection via Lin's method
-#auto('cb.auto')
+auto('cb.auto')
 
 # compute the codimension-zero PtoE connection and tangency using homotopy
 auto('tb.auto')
