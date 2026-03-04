@@ -1,9 +1,9 @@
 !     ------- ----
 PROGRAM AUTO
-  use auto_entry
-  implicit none
+  USE AUTO_ENTRY
+  IMPLICIT NONE
 
-  call auto_main()
+  CALL AUTO_MAIN()
 
 END PROGRAM AUTO
 !-----------------------------------------------------------------------

@@ -35,7 +35,6 @@ print "(second UZ is the one we want)"
 r6 = run(r5('UZ1'),ICP=['T-','sigma-','T+','mu','T'],NDIM=12,NBC=15,
          STOP=['UZ2'],UZR={'sigma-':0})
 
-"""
 print "\n7th run - put starting data for Lin vector and Lin gap in"
 print "Zx, Zy, Zz and eta"
 print "close the gap (with some intermediate solutions)"
@@ -43,7 +42,6 @@ r7 = run(r6('UZ2'),ICP=['eta','rho','delta','eps','T-','T+','mu','T'],
          NBC=17,NINT=2,NPR=10,THL={'T':0,'T+':0,'T-':0},
          STOP=['UZ1'],UZR={'eta':0},DS=-0.01,DSMIN=1e-7,DSMAX=0.1)
 save(r7,'closegap')
-
 
 # plot this, have a look at the solution coordinates 'x-'-vs-'z-' and 'x+'-vs-'z+'
 #plot(r7)
@@ -54,6 +52,6 @@ start8 = load(r7('UZ1'),ICP=['rho','beta','delta','eps','T-','T+','mu','T'],
      STOP=['LP1'],UZR={'rho':25},UZSTOP={'rho':80},ILP=1,NPR=200,DS=0.1,DSMAX=1)
 r8 = merge(run(start8) + run(start8,DS='-'))
 save(r8,'cont')
-"""
+
 clean()
 print "\nDone."
